@@ -17,22 +17,29 @@ def complex_matrix(xmin, xmax, ymin, ymax, pixel_density):
 def is_stable(c, num_iterations):
     z = 0
     for _ in range(num_iterations):
-        z = z ** 2 + c
+        #z = z ** 2 + c
+        z = z*(c**2) # e = m*c**2 .. let there be energy?
     return abs(z) <= 2
 
-np.warnings.filterwarnings("ignore")
+# np.warnings.filterwarnings("ignore")
 
 def get_members(c, num_iterations):
     mask = is_stable(c, num_iterations)
     return c[mask]
 
-c = complex_matrix(-2, 0.5, -1.5, 1.5, pixel_density=3000)
-members = get_members(c, num_iterations=20)
+pixel_density=1
 
-plt.scatter(members.real, members.imag, color="black", marker=",", s=1)
-plt.imshow(is_stable(c, num_iterations=20), cmap="binary")
 
-plt.gca().set_aspect("equal")
-plt.axis("off")
-plt.tight_layout()
+i = 0
+for i in range(75):
+    c = complex_matrix(-2, 0.5, -1.5, 1.5, pixel_density)
+    members = get_members(c, num_iterations=20)
+    plt.scatter(members.real, members.imag, color="black", marker=",", s=1)
+    plt.gca().set_aspect("equal")
+    plt.axis("off")
+    plt.tight_layout()
+    #plt.plot(members, color = 'green')
+    plt.pause(1)
+    pixel_density += 1
+    i+=1
 plt.show()
